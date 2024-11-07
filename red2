@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>點擊方塊遊戲</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid black;
+            cursor: pointer;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">分數: 0</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        let score = 0;
+        let box = {
+            x: Math.random() * 350,
+            y: Math.random() * 350,
+            size: 50
+        };
+
+        function drawBox() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(box.x, box.y, box.size, box.size);
+        }
+
+        function randomizeBoxPosition() {
+            box.x = Math.random() * (canvas.width - box.size);
+            box.y = Math.random() * (canvas.height - box.size);
+        }
+
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            if (
+                x >= box.x &&
+                x <= box.x + box.size &&
+                y >= box.y &&
+                y <= box.y + box.size
+            ) {
+                score++;
+                scoreDisplay.textContent = `分數: ${score}`;
+                randomizeBoxPosition();
+                drawBox();
+            }
+        });
+
+        drawBox();
+    </script>
+</body>
+</html>
